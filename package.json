@@ -1,0 +1,14 @@
+{
+  "name": "hwpe",
+  "version": "1.1.0",
+  "description": "실제 한글파일(HWP/HWPX) 웹 뷰어",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --check server.js && node --check app.js"
+  },
+  "keywords": ["hwp", "hwpx", "viewer", "node"],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}

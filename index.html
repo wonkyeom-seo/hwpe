@@ -2,398 +2,71 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>한글 문서 웹 에디터</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>실제 한글파일 뷰어 (HWP/HWPX)</title>
   <style>
-    :root {
-      --bg: #0f172a;
-      --panel: #111827;
-      --panel-2: #1f2937;
-      --line: #334155;
-      --text: #e5e7eb;
-      --muted: #94a3b8;
-      --accent: #38bdf8;
-      --danger: #ef4444;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      background: linear-gradient(180deg, #020617 0%, #0f172a 100%);
-      color: var(--text);
-      font-family: "Pretendard", "Noto Sans KR", Arial, sans-serif;
-      min-height: 100vh;
-      display: grid;
-      grid-template-rows: auto auto 1fr auto;
-    }
-    header {
-      padding: 14px 20px;
-      border-bottom: 1px solid var(--line);
-      background: rgba(2,6,23,.7);
-      backdrop-filter: blur(8px);
-      position: sticky;
-      top: 0;
-      z-index: 4;
-    }
-    h1 { margin: 0; font-size: 18px; }
-    .sub { color: var(--muted); font-size: 12px; margin-top: 4px; }
-
-    .toolbar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      padding: 12px 16px;
-      border-bottom: 1px solid var(--line);
-      background: rgba(17,24,39,.9);
-      position: sticky;
-      top: 64px;
-      z-index: 3;
-    }
-    .group { display: inline-flex; gap: 6px; align-items: center; padding-right: 10px; border-right: 1px solid var(--line); }
-    .group:last-child { border-right: none; }
-    button, select, input[type="color"], input[type="number"], input[type="text"] {
-      background: var(--panel-2);
-      color: var(--text);
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      height: 34px;
-      padding: 0 10px;
-      font-size: 13px;
-    }
-    input[type="color"] { width: 40px; padding: 0 4px; }
-    input[type="number"] { width: 72px; }
-    input[type="text"] { min-width: 140px; }
-    button:hover { border-color: var(--accent); cursor: pointer; }
-    button.primary { background: #0c4a6e; border-color: #0284c7; }
-    button.danger { border-color: #7f1d1d; background: #450a0a; }
-
-    main { padding: 18px; display: grid; grid-template-columns: 1fr 260px; gap: 16px; }
-    .editor-wrap {
-      border: 1px solid var(--line);
-      background: #fff;
-      border-radius: 12px;
-      min-height: 65vh;
-      box-shadow: 0 20px 35px rgba(0,0,0,.25);
-      overflow: hidden;
-      display: grid;
-      grid-template-rows: auto 1fr;
-    }
-    .doc-meta {
-      background: #f1f5f9;
-      border-bottom: 1px solid #cbd5e1;
-      color: #334155;
-      padding: 8px 12px;
-      display: flex;
-      gap: 12px;
-      font-size: 12px;
-    }
-    .editor {
-      color: #111827;
-      padding: 20mm;
-      outline: none;
-      line-height: 1.6;
-      overflow-y: auto;
-      min-height: 60vh;
-      max-height: 70vh;
-    }
-    aside {
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      padding: 12px;
-      background: rgba(17,24,39,.75);
-      height: fit-content;
-      position: sticky;
-      top: 128px;
-    }
-    .row { display: flex; gap: 8px; margin-bottom: 8px; }
-    .row > * { flex: 1; }
-    .hint { font-size: 12px; color: var(--muted); }
-    .status {
-      border-top: 1px solid var(--line);
-      padding: 10px 16px;
-      font-size: 12px;
-      color: var(--muted);
-      display: flex;
-      justify-content: space-between;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-    .badge { color: #7dd3fc; }
-    @media (max-width: 960px) {
-      main { grid-template-columns: 1fr; }
-      aside { position: static; }
-      .toolbar { top: 72px; }
-    }
+    :root { --bg:#0b1020; --card:#111827; --line:#334155; --text:#e2e8f0; --sub:#94a3b8; --accent:#22d3ee; }
+    *{box-sizing:border-box}
+    body{margin:0;background:linear-gradient(180deg,#020617,#0f172a);color:var(--text);font-family:"Noto Sans KR",sans-serif}
+    .wrap{max-width:1200px;margin:0 auto;padding:20px}
+    h1{margin:0 0 8px}
+    .desc{color:var(--sub);margin-bottom:16px}
+    .grid{display:grid;grid-template-columns:360px 1fr;gap:16px}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px}
+    .row{display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
+    button,input,select{height:38px;border-radius:8px;border:1px solid var(--line);background:#1f2937;color:var(--text);padding:0 10px}
+    button{cursor:pointer}
+    button.primary{background:#164e63;border-color:#0891b2}
+    .viewer{background:#fff;color:#111827;border-radius:10px;min-height:72vh;padding:24px;overflow:auto}
+    .viewer h3{margin:22px 0 8px;border-bottom:1px solid #e2e8f0;padding-bottom:6px;color:#0f172a}
+    .notice{padding:10px;border:1px solid #f59e0b;background:#fffbeb;color:#7c2d12;border-radius:8px;margin-bottom:8px}
+    .meta{font-size:13px;color:var(--sub);margin:10px 0}
+    .muted{font-size:12px;color:var(--sub)}
+    pre{white-space:pre-wrap;word-break:break-word;background:#f8fafc;border:1px solid #cbd5e1;padding:12px;border-radius:8px}
+    @media (max-width:980px){.grid{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
-<header>
-  <h1>한글 문서 웹 에디터</h1>
-  <div class="sub">업로드 → 편집 → 저장(HTML/TXT). 자동 임시저장 지원</div>
-</header>
+  <div class="wrap">
+    <h1>실제 한글파일 뷰어 (Node.js)</h1>
+    <div class="desc">.hwp/.hwpx 업로드 후 문서 내용을 렌더링합니다. 뷰어 결과를 수정하고 HTML/TXT로 저장할 수 있습니다.</div>
 
-<section class="toolbar" aria-label="문서 도구 모음">
-  <div class="group">
-    <input id="fileInput" type="file" accept=".txt,.md,.html,.htm,.doc,.docx,.hwpx,.hwp" />
-    <button id="newDoc">새 문서</button>
-  </div>
-  <div class="group">
-    <button data-cmd="bold"><b>B</b></button>
-    <button data-cmd="italic"><i>I</i></button>
-    <button data-cmd="underline"><u>U</u></button>
-    <button data-cmd="strikeThrough"><s>S</s></button>
-    <button data-cmd="insertUnorderedList">• 목록</button>
-    <button data-cmd="insertOrderedList">1. 목록</button>
-  </div>
-  <div class="group">
-    <button data-cmd="justifyLeft">좌</button>
-    <button data-cmd="justifyCenter">중</button>
-    <button data-cmd="justifyRight">우</button>
-    <button data-cmd="outdent">내어쓰기</button>
-    <button data-cmd="indent">들여쓰기</button>
-  </div>
-  <div class="group">
-    <select id="fontName">
-      <option value="Pretendard">Pretendard</option>
-      <option value="Noto Sans KR">Noto Sans KR</option>
-      <option value="Malgun Gothic">맑은 고딕</option>
-      <option value="Nanum Myeongjo">나눔명조</option>
-      <option value="monospace">Monospace</option>
-    </select>
-    <input id="fontSize" type="number" min="8" max="72" value="16" />
-    <input id="foreColor" type="color" value="#111111" title="글자색" />
-    <input id="backColor" type="color" value="#ffffff" title="배경색" />
-  </div>
-  <div class="group">
-    <button id="undo">실행취소</button>
-    <button id="redo">다시실행</button>
-    <button id="clearFmt">서식제거</button>
-  </div>
-  <div class="group">
-    <button id="saveHtml" class="primary">HTML 저장</button>
-    <button id="saveTxt" class="primary">TXT 저장</button>
-  </div>
-</section>
+    <div class="grid">
+      <section class="card">
+        <h3 style="margin-top:0">파일 열기</h3>
+        <div class="row">
+          <input id="fileInput" type="file" accept=".hwp,.hwpx" />
+          <button id="openBtn" class="primary">뷰어 열기</button>
+        </div>
+        <div class="meta" id="meta">문서 없음</div>
+        <div class="row">
+          <button id="saveHtml">HTML 저장</button>
+          <button id="saveTxt">TXT 저장</button>
+        </div>
+        <div class="row">
+          <button id="zoomOut">축소</button>
+          <button id="zoomIn">확대</button>
+          <span class="muted" id="zoomLabel">배율 100%</span>
+        </div>
+        <hr style="border-color:#334155"/>
+        <div class="row">
+          <input id="findText" type="text" placeholder="찾을 단어" style="flex:1" />
+          <button id="findBtn">찾기</button>
+        </div>
+        <div class="row">
+          <input id="replaceText" type="text" placeholder="바꿀 단어" style="flex:1" />
+          <button id="replaceBtn">전체 치환</button>
+        </div>
+        <p class="muted">참고: HWPX는 구조 기반으로 섹션별 렌더링합니다. HWP는 바이너리 특성상 텍스트 우선 뷰를 제공합니다.</p>
+      </section>
 
-<main>
-  <section class="editor-wrap">
-    <div class="doc-meta">
-      <span id="docName">문서명: 새 문서</span>
-      <span id="docType">형식: HTML</span>
-      <span id="autosaveState">자동저장: 대기</span>
+      <section class="card" style="padding:10px">
+        <article id="viewer" class="viewer" contenteditable="true">
+          <p>한글 파일을 업로드하면 여기에 렌더링됩니다.</p>
+        </article>
+      </section>
     </div>
-    <article id="editor" class="editor" contenteditable="true">
-      <h2>문서를 시작하세요</h2>
-      <p>파일을 업로드하거나 바로 편집해 보세요.</p>
-    </article>
-  </section>
-
-  <aside>
-    <h3 style="margin-top:4px;">빠른 도구</h3>
-    <div class="row">
-      <input id="findText" type="text" placeholder="찾을 내용" />
-      <button id="findBtn">찾기</button>
-    </div>
-    <div class="row">
-      <input id="replaceText" type="text" placeholder="바꿀 내용" />
-      <button id="replaceBtn">1회 치환</button>
-    </div>
-    <button id="replaceAllBtn" style="width:100%; margin-bottom:10px;">전체 치환</button>
-    <button id="insertTable" style="width:100%; margin-bottom:8px;">표 삽입(2x2)</button>
-    <button id="insertDate" style="width:100%; margin-bottom:8px;">현재 날짜 삽입</button>
-    <button id="printBtn" style="width:100%; margin-bottom:8px;">인쇄/ PDF 저장</button>
-    <button id="restoreDraft" style="width:100%; margin-bottom:8px;">임시저장 불러오기</button>
-    <button id="clearDraft" class="danger" style="width:100%;">임시저장 삭제</button>
-    <p class="hint">참고: .hwp는 바이너리 포맷이라 브라우저에서 직접 편집이 제한됩니다. .hwpx/.html/.txt 권장.</p>
-  </aside>
-</main>
-
-<footer class="status">
-  <span id="stats">글자수 0 | 단어수 0</span>
-  <span class="badge">Ctrl+S: HTML 저장 / Ctrl+F: 찾기 / Ctrl+H: 전체 치환</span>
-</footer>
-
-<script>
-  const editor = document.getElementById('editor');
-  const fileInput = document.getElementById('fileInput');
-  const docNameEl = document.getElementById('docName');
-  const docTypeEl = document.getElementById('docType');
-  const autosaveStateEl = document.getElementById('autosaveState');
-  const statsEl = document.getElementById('stats');
-
-  let currentFileName = '문서';
-  const AUTOSAVE_KEY = 'hangul_editor_autosave_v1';
-
-  function exec(cmd, value = null) {
-    editor.focus();
-    document.execCommand(cmd, false, value);
-    updateStats();
-  }
-
-  document.querySelectorAll('[data-cmd]').forEach(btn => {
-    btn.addEventListener('click', () => exec(btn.dataset.cmd));
-  });
-
-  document.getElementById('fontName').addEventListener('change', e => exec('fontName', e.target.value));
-  document.getElementById('fontSize').addEventListener('change', e => {
-    exec('fontSize', '7');
-    document.querySelectorAll('font[size="7"]').forEach(font => {
-      font.removeAttribute('size');
-      font.style.fontSize = `${e.target.value}px`;
-    });
-  });
-  document.getElementById('foreColor').addEventListener('input', e => exec('foreColor', e.target.value));
-  document.getElementById('backColor').addEventListener('input', e => exec('hiliteColor', e.target.value));
-
-  document.getElementById('undo').addEventListener('click', () => exec('undo'));
-  document.getElementById('redo').addEventListener('click', () => exec('redo'));
-  document.getElementById('clearFmt').addEventListener('click', () => exec('removeFormat'));
-
-  document.getElementById('newDoc').addEventListener('click', () => {
-    if (confirm('현재 내용을 지우고 새 문서를 만드시겠습니까?')) {
-      editor.innerHTML = '<p><br></p>';
-      currentFileName = '새 문서';
-      docNameEl.textContent = `문서명: ${currentFileName}`;
-      docTypeEl.textContent = '형식: HTML';
-      updateStats();
-    }
-  });
-
-  fileInput.addEventListener('change', async (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    currentFileName = file.name.replace(/\.[^.]+$/, '');
-    docNameEl.textContent = `문서명: ${file.name}`;
-
-    const ext = file.name.split('.').pop().toLowerCase();
-    docTypeEl.textContent = `형식: .${ext}`;
-
-    if (ext === 'hwp') {
-      alert('.hwp 파일은 브라우저에서 직접 파싱이 어려워 원본 업로드만 가능합니다. .hwpx 또는 txt/html로 변환 후 업로드해 주세요.');
-      return;
-    }
-
-    const text = await file.text();
-    if (['html', 'htm'].includes(ext)) {
-      editor.innerHTML = text;
-    } else {
-      editor.textContent = text;
-    }
-    updateStats();
-  });
-
-  function download(content, fileName, type) {
-    const blob = new Blob([content], { type });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = fileName;
-    a.click();
-    URL.revokeObjectURL(url);
-  }
-
-  document.getElementById('saveHtml').addEventListener('click', () => {
-    const html = `<!doctype html><html><head><meta charset="utf-8"></head><body>${editor.innerHTML}</body></html>`;
-    download(html, `${currentFileName || '문서'}.html`, 'text/html;charset=utf-8');
-  });
-
-  document.getElementById('saveTxt').addEventListener('click', () => {
-    download(editor.innerText, `${currentFileName || '문서'}.txt`, 'text/plain;charset=utf-8');
-  });
-
-  document.getElementById('findBtn').addEventListener('click', () => {
-    const q = document.getElementById('findText').value.trim();
-    if (!q) return;
-    if (!window.find(q)) alert('찾는 문자열이 없습니다.');
-  });
-
-  function replaceOnce(findText, replaceText) {
-    if (!findText) return false;
-    const html = editor.innerHTML;
-    const idx = html.indexOf(findText);
-    if (idx === -1) return false;
-    editor.innerHTML = html.replace(findText, replaceText);
-    return true;
-  }
-
-  document.getElementById('replaceBtn').addEventListener('click', () => {
-    const f = document.getElementById('findText').value;
-    const r = document.getElementById('replaceText').value;
-    const ok = replaceOnce(f, r);
-    if (!ok) alert('치환할 문자열이 없습니다.');
-    updateStats();
-  });
-
-  document.getElementById('replaceAllBtn').addEventListener('click', () => {
-    const f = document.getElementById('findText').value;
-    const r = document.getElementById('replaceText').value;
-    if (!f) return;
-    editor.innerHTML = editor.innerHTML.split(f).join(r);
-    updateStats();
-  });
-
-  document.getElementById('insertTable').addEventListener('click', () => {
-    exec('insertHTML', `<table border="1" style="border-collapse:collapse; width:100%;"><tr><td>셀1</td><td>셀2</td></tr><tr><td>셀3</td><td>셀4</td></tr></table><p></p>`);
-  });
-
-  document.getElementById('insertDate').addEventListener('click', () => {
-    const d = new Date();
-    exec('insertText', `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`);
-  });
-
-  document.getElementById('printBtn').addEventListener('click', () => window.print());
-
-  document.getElementById('restoreDraft').addEventListener('click', () => {
-    const raw = localStorage.getItem(AUTOSAVE_KEY);
-    if (!raw) return alert('저장된 임시 문서가 없습니다.');
-    const data = JSON.parse(raw);
-    editor.innerHTML = data.html;
-    currentFileName = data.name || '임시문서';
-    docNameEl.textContent = `문서명: ${currentFileName}`;
-    autosaveStateEl.textContent = `자동저장: ${new Date(data.savedAt).toLocaleString()}`;
-    updateStats();
-  });
-
-  document.getElementById('clearDraft').addEventListener('click', () => {
-    localStorage.removeItem(AUTOSAVE_KEY);
-    autosaveStateEl.textContent = '자동저장: 삭제됨';
-  });
-
-  function updateStats() {
-    const t = editor.innerText || '';
-    const charCount = t.replace(/\s/g, '').length;
-    const wordCount = t.trim() ? t.trim().split(/\s+/).length : 0;
-    statsEl.textContent = `글자수 ${charCount} | 단어수 ${wordCount}`;
-  }
-
-  let autosaveTimer = null;
-  editor.addEventListener('input', () => {
-    updateStats();
-    clearTimeout(autosaveTimer);
-    autosaveStateEl.textContent = '자동저장: 저장 중...';
-    autosaveTimer = setTimeout(() => {
-      const payload = { html: editor.innerHTML, name: currentFileName, savedAt: new Date().toISOString() };
-      localStorage.setItem(AUTOSAVE_KEY, JSON.stringify(payload));
-      autosaveStateEl.textContent = `자동저장: ${new Date(payload.savedAt).toLocaleTimeString()}`;
-    }, 600);
-  });
-
-  window.addEventListener('keydown', (e) => {
-    if (e.ctrlKey && e.key.toLowerCase() === 's') {
-      e.preventDefault();
-      document.getElementById('saveHtml').click();
-    }
-    if (e.ctrlKey && e.key.toLowerCase() === 'f') {
-      e.preventDefault();
-      document.getElementById('findText').focus();
-    }
-    if (e.ctrlKey && e.key.toLowerCase() === 'h') {
-      e.preventDefault();
-      document.getElementById('replaceAllBtn').click();
-    }
-  });
-
-  updateStats();
-</script>
+  </div>
+  <script src="/app.js"></script>
 </body>
 </html>
