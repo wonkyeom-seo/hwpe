@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>실제 한글파일 뷰어 (HWP/HWPX)</title>
+  <style>
+    :root { --bg:#0b1020; --card:#111827; --line:#334155; --text:#e2e8f0; --sub:#94a3b8; --accent:#22d3ee; }
+    *{box-sizing:border-box}
+    body{margin:0;background:linear-gradient(180deg,#020617,#0f172a);color:var(--text);font-family:"Noto Sans KR",sans-serif}
+    .wrap{max-width:1200px;margin:0 auto;padding:20px}
+    h1{margin:0 0 8px}
+    .desc{color:var(--sub);margin-bottom:16px}
+    .grid{display:grid;grid-template-columns:360px 1fr;gap:16px}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px}
+    .row{display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
+    button,input,select{height:38px;border-radius:8px;border:1px solid var(--line);background:#1f2937;color:var(--text);padding:0 10px}
+    button{cursor:pointer}
+    button.primary{background:#164e63;border-color:#0891b2}
+    .viewer{background:#fff;color:#111827;border-radius:10px;min-height:72vh;padding:24px;overflow:auto}
+    .viewer h3{margin:22px 0 8px;border-bottom:1px solid #e2e8f0;padding-bottom:6px;color:#0f172a}
+    .notice{padding:10px;border:1px solid #f59e0b;background:#fffbeb;color:#7c2d12;border-radius:8px;margin-bottom:8px}
+    .meta{font-size:13px;color:var(--sub);margin:10px 0}
+    .muted{font-size:12px;color:var(--sub)}
+    pre{white-space:pre-wrap;word-break:break-word;background:#f8fafc;border:1px solid #cbd5e1;padding:12px;border-radius:8px}
+    @media (max-width:980px){.grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>실제 한글파일 뷰어 (Node.js)</h1>
+    <div class="desc">.hwp/.hwpx 업로드 후 문서 내용을 렌더링합니다. 뷰어 결과를 수정하고 HTML/TXT로 저장할 수 있습니다.</div>
+
+    <div class="grid">
+      <section class="card">
+        <h3 style="margin-top:0">파일 열기</h3>
+        <div class="row">
+          <input id="fileInput" type="file" accept=".hwp,.hwpx" />
+          <button id="openBtn" class="primary">뷰어 열기</button>
+        </div>
+        <div class="meta" id="meta">문서 없음</div>
+        <div class="row">
+          <button id="saveHtml">HTML 저장</button>
+          <button id="saveTxt">TXT 저장</button>
+        </div>
+        <div class="row">
+          <button id="zoomOut">축소</button>
+          <button id="zoomIn">확대</button>
+          <span class="muted" id="zoomLabel">배율 100%</span>
+        </div>
+        <hr style="border-color:#334155"/>
+        <div class="row">
+          <input id="findText" type="text" placeholder="찾을 단어" style="flex:1" />
+          <button id="findBtn">찾기</button>
+        </div>
+        <div class="row">
+          <input id="replaceText" type="text" placeholder="바꿀 단어" style="flex:1" />
+          <button id="replaceBtn">전체 치환</button>
+        </div>
+        <p class="muted">참고: HWPX는 구조 기반으로 섹션별 렌더링합니다. HWP는 바이너리 특성상 텍스트 우선 뷰를 제공합니다.</p>
+      </section>
+
+      <section class="card" style="padding:10px">
+        <article id="viewer" class="viewer" contenteditable="true">
+          <p>한글 파일을 업로드하면 여기에 렌더링됩니다.</p>
+        </article>
+      </section>
+    </div>
+  </div>
+  <script src="/app.js"></script>
+</body>
+</html>
